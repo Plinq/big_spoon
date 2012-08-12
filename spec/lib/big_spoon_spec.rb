@@ -110,4 +110,10 @@ describe BigSpoon do
     BigSpoonTest.before_foo! :hook_7, :unless => :please_dont_hook
     @big_spoon_test.foo!
   end
+
+  it "should meta-program before_* hooks" do
+    @big_spoon_test.should_receive(:hook_8)
+    BigSpoonTest.before_foo! :hook_8
+    @big_spoon_test.foo!
+  end
 end
