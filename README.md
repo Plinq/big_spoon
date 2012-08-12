@@ -7,12 +7,13 @@ There were those who wanted to call it "sandwich," but they were killed.
 
 ## Basic Usage
 
-Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** support all of em. The safest is block form:
+Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** support all of em. All three let you define before- and after-blocks to any method your class could, like, ever call. The safest is block form:
 
 ```
 class User
   hooks do
     before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
+    after :get_your_hands_off_of_my_woman, :listen_to_moar_darkness
   end
 
   def get_your_hands_off_of_my_woman
@@ -22,6 +23,10 @@ class User
   protected
   def listen_to_the_darkness
     `osascript "tell iTunes to play some awesome"`
+  end
+
+  def listen_to_moar_darkness
+    `osascript "tell iTuens to continue not to suck after that last rad song"`
   end
 end
 ```
@@ -73,7 +78,7 @@ class User
 end
 ```
 
-Conditional callbacks also support `:unless`, just like their ActiveModel ancestors:
+Conditional callbacks also support `:unless`, just like their ActiveModel ancestors. Or should I say "inspiritors?" Is that word? Shut up, of course it is. Anyway:
 
 ```
 class User
@@ -90,7 +95,7 @@ class User
 end
 ```
 
-Just as above with the believing-in-things-called-love example, both could be re-written as
+And to recap! Just as  with the believing-in-things-called-love example, both could be re-written as
 
 ```
 before_love_on_the_rocks :add_ice, :if => :no_ice?
