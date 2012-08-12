@@ -9,7 +9,7 @@ There were those who wanted to call it "sandwich," but they were killed.
 
 Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** support all of em. All three let you define before- and after-blocks to any method your class could, like, ever call. The safest is block form:
 
-```
+```ruby
 class User
   hooks do
     before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
@@ -34,7 +34,7 @@ end
 This is designed not to conflict with Rails callbacks and their siblings. **But if'n
 you're a real scofflaw (_and you f*cking should be!_), you can just do it normal-like:**
 
-```
+```ruby
 class User
   before_believe_in_a_thing_called_love :listen_to_the_rhythm_of_my_heart
 
@@ -59,7 +59,7 @@ But, as they say, "love is only a feeling." So spoon like there's no tomorrow.
 
 Because ActiveModel callbacks are just so damn delightful, I've added some fun conditional sugar to match their wonderful. So g'head and add some `:if` conditions to your callbacks:
 
-```
+```ruby
 class User
   before :love_on_the_rocks, :add_ice, :if => :no_ice?
 
@@ -80,7 +80,7 @@ end
 
 Conditional callbacks also support `:unless`, just like their ActiveModel ancestors. Or should I say "inspiritors?" Is that word? Shut up, of course it is. Anyway:
 
-```
+```ruby
 class User
   before :love_on_the_rocks, :add_ice, :unless => :not_in_tys_mazada?
 
@@ -97,13 +97,13 @@ end
 
 And to recap! Just as  with the believing-in-things-called-love example, both could be re-written as
 
-```
+```ruby
 before_love_on_the_rocks :add_ice, :if => :no_ice?
 ```
 
 and
 
-```
+```ruby
 before_love_on_the_rocks :add_ice, :unless => :not_in_tys_mazda?
 ```
 
