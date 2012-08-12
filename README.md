@@ -1,14 +1,15 @@
-# Big Spoon
-Like the big spoon, **Big Spoon** wraps around your own methods.
-It adds before and after callbacks to ANY method in any Ruby class.
-Basically, now you can add hooks and/or callback to **any** Ruby method without fear of reprisals.
+# Big Spoon*
+Like the big spoon in your relationship, **Big Spoon** wraps around your methods to wrap them in the warmth of callbacks.
 
-There were those who wanted to call it "sandwich," but they were killed.
+Meaning: it adds `before` and `after` callbacks to **ANY** method in **_ANY_** Ruby class.
+Basically, now you can add hooks and/or callbacks to **any** Ruby method without fear of reprisals.
+
+*There were those who wanted to call it "sandwich," but they were killed.
 
 ## Basic Usage
 
-Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** supports all of em. All
-three let you define before- and after-methods or blocks to any method your class could, like, ever call. The safest is block form:
+Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** supports all of 'em. Any
+form lets you define `before`- and `after`-methods-or-blocks that any method your class could, like, ever call, should call. I just talked miles around a simple concept. But check it, code helps explain better than me! The safest is block form:
 
 ```ruby
 class User
