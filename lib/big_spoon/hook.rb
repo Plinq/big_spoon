@@ -1,4 +1,4 @@
-module WorkingGirl
+module BigSpoon
   class Hook
     class << self
       def for(klass)
@@ -113,7 +113,7 @@ module WorkingGirl
     end
 
 	  def hooked_method(method_to_hook)
-	    "_working_girl_alias_#{method_to_hook}"
+	    "_big_spoon_alias_#{method_to_hook}"
     end
 
     def method_missing(method_name, *args)
@@ -132,7 +132,7 @@ module WorkingGirl
     end
 
 	  def original_method(method_to_hook)
-	    "_working_girl_original_#{method_to_hook}"
+	    "_big_spoon_original_#{method_to_hook}"
     end
   end
 end

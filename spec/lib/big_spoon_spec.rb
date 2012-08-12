@@ -1,6 +1,6 @@
-require 'working_girl'
+require 'big_spoon'
 
-class WorkingGirlTest
+class BigSpoonTest
   hooks do
     before :foo!, :hook_1
   end
@@ -35,9 +35,9 @@ class WorkingGirlTest
   end
 end
 
-describe WorkingGirl do
+describe BigSpoon do
   before :each do
-    @working_girl_test = WorkingGirlTest.new
+    @big_spoon_test = BigSpoonTest.new
   end
 
   it "should monkeypatch Object" do
@@ -45,47 +45,47 @@ describe WorkingGirl do
   end
 
   it "should allow me to add a hook before an object's methods BEFORE THEY EXIST" do
-    @working_girl_test.should_receive(:hook_1)
-    @working_girl_test.foo!
+    @big_spoon_test.should_receive(:hook_1)
+    @big_spoon_test.foo!
   end
 
   it "should allow me to add a hook after an object's methods AFTER THEY EXIST" do
-    WorkingGirlTest.hooks do
+    BigSpoonTest.hooks do
       after :bar!, :hook_2
     end
-    @working_girl_test.should_receive(:hook_2)
-    @working_girl_test.bar!
+    @big_spoon_test.should_receive(:hook_2)
+    @big_spoon_test.bar!
   end
 
   it "should allow me to add a hook lambda" do
-    WorkingGirlTest.hooks do
+    BigSpoonTest.hooks do
       after :bar! do
         puts self.inspect
       end
     end
-    @working_girl_test.should_receive(:puts)
-    @working_girl_test.should_receive(:inspect)
-    @working_girl_test.bar!
+    @big_spoon_test.should_receive(:puts)
+    @big_spoon_test.should_receive(:inspect)
+    @big_spoon_test.bar!
   end
 
   it "should still return the appropriate method's value" do
-    @working_girl_test.should_receive(:hook_1)
-    @working_girl_test.foo!.should == :foo
+    @big_spoon_test.should_receive(:hook_1)
+    @big_spoon_test.foo!.should == :foo
   end
 
   it "should allow me to metaprogram before_* hooks" do
-    @working_girl_test.should_receive(:hook_2)
-    WorkingGirlTest.hooks do
+    @big_spoon_test.should_receive(:hook_2)
+    BigSpoonTest.hooks do
       before_foo! :hook_2
     end
-    @working_girl_test.foo!
+    @big_spoon_test.foo!
   end
 
   it "should allow me to metaprogram after_* hooks" do
-    @working_girl_test.should_receive(:hook_3)
-    WorkingGirlTest.hooks do
+    @big_spoon_test.should_receive(:hook_3)
+    BigSpoonTest.hooks do
       after_foo! :hook_3
     end
-    @working_girl_test.foo!
+    @big_spoon_test.foo!
   end
 end

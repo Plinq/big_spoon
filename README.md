@@ -1,7 +1,10 @@
-# Working Girl
-...is a play-on-words that's probably not appropriate and I don't think I'll release it publicly until I rename it.
+# Big Spoon
+Like the big spoon, **Big Spoon** wraps around your own methods.
+It adds before and after callbacks to ANY method in any Ruby class.
 
-Until such a time, I'll tell you that it's called that because it adds _hooks_ around Ruby methods. It can do this before
+There were those who wanted to call it "sandwich," but they were killed.
+
+**Big Spoon** adds _hooks_ around ANY method. It can do this before
 or after the methods are defined, making it awesome for fun stuff like adding extra hooks around events at the top of
 a class definition without having to worry about when the method gets defined.
 
@@ -30,8 +33,10 @@ So now, when you do something like this:
 user = User.new(:first_name => "Flip", :last_name => "Sasser")
 user.name #=> "Flip Sasser"
 user.first_name = "Elizabeth"
-user.name #=> "Flip Sasser" OH NOE MY INSTANCE VARIABLE GOT CACHED LIKE IT SHOULD
-user.reload.name #=> "Flip Sasser" OH NOE RELOAD DOESN'T RESET INSTANCE VARIABLES
+user.name #=> "Flip Sasser"
+# OH NOE MY INSTANCE VARIABLE GOT CACHED LIKE IT SHOULD
+user.reload.name #=> "Flip Sasser"
+# OH NOE RELOAD DOESN'T RESET INSTANCE VARIABLES
 ```
 
 But what if you could hook into `ActiveRecord::Base#reload`?
