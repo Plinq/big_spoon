@@ -1,18 +1,17 @@
 # Big Spoon
 Like the big spoon, **Big Spoon** wraps around your own methods.
 It adds before and after callbacks to ANY method in any Ruby class.
-Basically, now you can hook into **any** Ruby method without fear of reprisals.
+Basically, now you can hooks and/or callback to **any** Ruby method without fear of reprisals.
 
 There were those who wanted to call it "sandwich," but they were killed.
 
-## Usage
+## Basic Usage
 
-Use **Big Spoon** like you would any other callback method! There's, like, at
-least three ways to use it. The safest is block form:
+Use **Big Spoon** like you would any other callbacks! Of course there's, like, at least three ways to do that. So **Big Spoon** support all of em. The safest is block form:
 
 ```
 class User
-  hook do
+  hooks do
     before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
   end
 
@@ -47,7 +46,65 @@ class User
   end
 ````
 
-So. Add hooks. To any Ruby method. That's pretty damn awesome, where I come from. But, as they say, "love is only a feeling." So spoon like there's no tomorrow.
+So. Add hooks. To any Ruby method. That's pretty damn awesome, where I come form. I SAID "FORM," son!
+
+But, as they say, "love is only a feeling." So spoon like there's no tomorrow.
+
+## But there's (conditionally) more!
+
+Because ActiveModel callbacks are just so damn delightful, I've added some fun conditional sugar to match their wonderful. So g'head and add some `:if` conditions to your callbacks:
+
+```
+class User
+  before :love_on_the_rocks, :add_ice, :if => :no_ice?
+
+  def love_on_the_rocks
+    puts "Loo-OOOVE ON THE ROCKS! YOU'D DO ANYTHING FOR A QUIET LIFE!"
+  end
+
+  def no_ice?
+    Ice.empty?
+  end
+
+  protected
+  def add_ice
+    Ice.create!
+  end
+end
+```
+
+Conditional callbacks also support `:unless`, just like their ActiveModel ancestors:
+
+```
+class User
+  before :love_on_the_rocks, :add_ice, :unless => :not_in_tys_mazada?
+
+  def not_in_tys_mazada?
+    !((mazda = User.find_by_slug("ty").car) && mazda.has_rad_bass?)
+  end
+
+  protected
+  def add_ice
+    Ice.create!
+  end
+end
+```
+
+Just as above with the believing-in-things-called-love example, both could be re-written as
+
+```
+before_love_on_the_rocks :add_ice, :if => :no_ice?
+```
+
+and
+
+```
+before_love_on_the_rocks :add_ice, :unless => :not_in_tys_mazda?
+```
+
+respectively.
+
+HAPPY **CALLING-OF-THE-BACK**, FRIENDS!
 
 
 Copyright © 2012 Delightful Widgets Inc. No warranty so don't sue me or my company THANKS!
