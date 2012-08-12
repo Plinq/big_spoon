@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "big_spoon"
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Flip Sasser"]
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
     "spec/lib/big_spoon_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/Plinq/big_spoon"
+  s.homepage = "https://github.com/flipsasser/big_spoon"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
   s.summary = "Adds before and after hooks to any method, because that's just how things should be"
