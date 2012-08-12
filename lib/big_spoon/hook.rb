@@ -14,13 +14,13 @@ module BigSpoon
     attr_accessor :klass
 
     # Define a method to execute after another
-    def after(method_to_hook, method_to_call = nil, &block)
-      hook(:after, method_to_hook, method_to_call, &block)
+    def after(method_to_hook, method_to_call = nil, options = {}, &block)
+      hook(:after, method_to_hook, method_to_call, options, &block)
     end
 
     # Define a method to execute before another
-    def before(method_to_hook, method_to_call = nil, &block)
-      hook(:before, method_to_hook, method_to_call, &block)
+    def before(method_to_hook, method_to_call = nil, options = {}, &block)
+      hook(:before, method_to_hook, method_to_call, options, &block)
     end
 
     # def clear!
@@ -45,14 +45,14 @@ module BigSpoon
       hooked_method = hooked_method(method_to_hook)
       original_method = original_method(method_to_hook)
       line = __LINE__; alias_these_hooks = <<-hooks
-        alias :#{original_method} :#{method_to_hook}
-        def #{hooked_method}(*args)
-          Hook.for(self.class).execute_before(:#{method_to_hook}, self)
-          result = #{original_method}
-          Hook.for(self.class).execute_after(:#{method_to_hook}, self)
-          result
-        end
-        alias :#{method_to_hook} :#{hooked_method}
+      alias :#{original_method} :#{method_to_hook}
+      def #{hooked_method}(*args)
+        Hook.for(self.class).execute_before(:#{method_to_hook}, self)
+        result = #{original_method}
+        Hook.for(self.class).execute_after(:#{method_to_hook}, self)
+        result
+      end
+      alias :#{method_to_hook} :#{hooked_method}
       hooks
       klass.class_eval alias_these_hooks, __FILE__, line.succ
     end
@@ -69,8 +69,8 @@ module BigSpoon
       hooked_method = hooked_method(method_to_hook)
       original_method = original_method(method_to_hook)
       line = __LINE__; alias_these_hooks = <<-hooks
-        alias :#{method_to_hook} #{original_method}
-        remove_method #{hooked_method}
+      alias :#{method_to_hook} #{original_method}
+      remove_method #{hooked_method}
       hooks
       klass.class_eval alias_these_hooks, __FILE__, line.succ
     end
@@ -79,18 +79,35 @@ module BigSpoon
     def execute(before_or_after, method_to_hook, instance)
       methods[method_to_hook] ||= {}
       methods[method_to_hook][before_or_after] ||= []
-      methods[method_to_hook][before_or_after].each do |hook_to_call|
-        case hook_to_call
-        when Proc
-          instance.instance_eval(&hook_to_call)
+      methods[method_to_hook][before_or_after].each do |method_definition|
+        execute_for_reals = if method_definition[:if].is_a?(Proc)
+          instance.instance_eval(&method_definition[:if])
+        elsif method_definition[:if]
+          instance.send(method_definition[:if])
+        elsif method_definition[:unless].is_a?(Proc)
+          !instance.instance_eval(&method_definition[:unless])
+        elsif method_definition[:unless]
+          !instance.send(method_definition[:unless])
         else
-          instance.send(hook_to_call)
+          true
+        end
+        if execute_for_reals
+          case method_definition[:method]
+          when Proc
+            instance.instance_eval(&method_definition[:method])
+          else
+            instance.send(method_definition[:method])
+          end
         end
       end
     end
 
-    def hook(before_or_after, method_to_hook, method_to_call = nil, &block)
+    def hook(before_or_after, method_to_hook, method_to_call = nil, options = {}, &block)
       method_to_hook = method_to_hook.to_sym
+      if method_to_call.is_a? Hash
+        options = method_to_call
+        method_to_call = nil
+      end
       if block_given?
         method_to_call = block
       else
@@ -99,7 +116,10 @@ module BigSpoon
 
       methods[method_to_hook] ||= {}
       methods[method_to_hook][before_or_after] ||= []
-      methods[method_to_hook][before_or_after].push(method_to_call) unless methods[method_to_hook][before_or_after].include?(method_to_call)
+      method_definition = options.merge({:method => method_to_call})
+      methods[method_to_hook][before_or_after].push(method_definition) unless methods[method_to_hook][before_or_after].any? do |other_method_definition|
+        other_method_definition[:method] == method_to_call
+      end
 
       hook!(method_to_hook) if should_hook?(method_to_hook)
     end
@@ -112,8 +132,8 @@ module BigSpoon
       klass.method_defined?(hooked_method(method_to_hook))
     end
 
-	  def hooked_method(method_to_hook)
-	    "_big_spoon_alias_#{method_to_hook}"
+    def hooked_method(method_to_hook)
+      "_big_spoon_alias_#{method_to_hook}"
     end
 
     def method_missing(method_name, *args)
@@ -131,8 +151,8 @@ module BigSpoon
       @methods ||= {}
     end
 
-	  def original_method(method_to_hook)
-	    "_big_spoon_original_#{method_to_hook}"
+    def original_method(method_to_hook)
+      "_big_spoon_original_#{method_to_hook}"
     end
   end
 end

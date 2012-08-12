@@ -1,58 +1,53 @@
 # Big Spoon
 Like the big spoon, **Big Spoon** wraps around your own methods.
 It adds before and after callbacks to ANY method in any Ruby class.
+Basically, now you can hook into **any** Ruby method without fear of reprisals.
 
 There were those who wanted to call it "sandwich," but they were killed.
 
-**Big Spoon** adds _hooks_ around ANY method. It can do this before
-or after the methods are defined, making it awesome for fun stuff like adding extra hooks around events at the top of
-a class definition without having to worry about when the method gets defined.
-
-I think I'm going to import it into all of my libraries to avoid alias\_method_chaining anything ever again.
-
-Anyway, here's how it works for now, DON'T use it cause I haven't tested it with shit:
-
 ## Usage
 
-Let's say, for example, you want to reset an instance variable in a model when it gets reloaded.
-
-For shits and giggles and real-world-clarity, I'll use an ActiveRecord model but this could be
-anything that knows about `reload`.
+Use **Big Spoon** like you would any other callback method! There's, like, at
+least three ways to use it. The safest is block form:
 
 ```
-class User < ActiveRecord::Base
-  def name
-    @name ||= "#{first_name} #{last_name}"
+class User
+  hook do
+    before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
+  end
+
+  def get_your_hands_off_of_my_woman
+    puts "Get your hands off of my woman, motherf*cker!"
+  end
+
+  protected
+  def listen_to_the_darkness
+    `osascript "tell iTunes to play some awesome"`
   end
 end
 ```
 
-So now, when you do something like this:
+This is designed not to conflict with Rails callbacks and their siblings. **But if'n
+you're a real scofflaw (_and you f*cking should be!_), you can just do it normal-like:**
 
 ```
-user = User.new(:first_name => "Flip", :last_name => "Sasser")
-user.name #=> "Flip Sasser"
-user.first_name = "Elizabeth"
-user.name #=> "Flip Sasser"
-# OH NOE MY INSTANCE VARIABLE GOT CACHED LIKE IT SHOULD
-user.reload.name #=> "Flip Sasser"
-# OH NOE RELOAD DOESN'T RESET INSTANCE VARIABLES
-```
+class User
+  before_believe_in_a_thing_called_love :listen_to_the_rhythm_of_my_heart
 
-But what if you could hook into `ActiveRecord::Base#reload`?
-
-```
-class User < ActiveRecord::Base
-  hooks do
-    before_reload { @name = nil }
+  def believe_in_a_thing_called_love
+    puts "We'll be rockin til the sun goes down!"
   end
 
-  def name
-    @name ||= "#{first_name} #{last_name}"
+  def listen_to_the_rhythm_of_my_heart
+    listen("127.0.0.1") do
+      match /(lub|dub)/ do
+        puts "Edgar Allan F*cking Poe?!"
+      end
+    end
   end
-end
-```
+````
 
-Now you can reset the instance variable. Neat, right? Obviously this is way more awesome way more places but that's the long and short of it.
+So. Add hooks. To any Ruby method. That's pretty damn awesome, where I come from. But, as they say, "love is only a feeling." So spoon like there's no tomorrow.
+
 
 Copyright © 2012 Delightful Widgets Inc. No warranty so don't sue me or my company THANKS!
