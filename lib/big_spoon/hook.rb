@@ -48,7 +48,7 @@ module BigSpoon
       alias :#{original_method} :#{method_to_hook}
       def #{hooked_method}(*args)
         Hook.for(self.class).execute_before(:#{method_to_hook}, self)
-        result = #{original_method}
+        result = #{original_method}(*args)
         Hook.for(self.class).execute_after(:#{method_to_hook}, self)
         result
       end

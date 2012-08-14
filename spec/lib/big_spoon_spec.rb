@@ -13,6 +13,22 @@ class BigSpoonTest
     :bar
   end
 
+  def i_accept_one(argument)
+    puts argument
+  end
+
+  def i_accept_many(*arguments)
+    puts arguments
+  end
+
+  def i_might_accept_one(argument = nil)
+    puts argument
+  end
+
+  def raise_sommat
+    raise "This method will never look the same! EVER!"
+  end
+
   private
   def by_all_means_hook
     true
@@ -22,7 +38,7 @@ class BigSpoonTest
     false
   end
 
-  (1..8).each do |index|
+  (1..20).each do |index|
     define_method("hook_#{index}") { "hook_#{index}"}
   end
 end
@@ -115,5 +131,32 @@ describe BigSpoon do
     @big_spoon_test.should_receive(:hook_8)
     BigSpoonTest.before_foo! :hook_8
     @big_spoon_test.foo!
+  end
+
+  it "should handle a set number of arguments in methods" do
+    BigSpoonTest.before :i_accept_one, :hook_9
+    @big_spoon_test.should_receive(:puts).with("ohai")
+    @big_spoon_test.i_accept_one("ohai")
+  end
+
+  it "should handle an arbitrary number of arguments in methods" do
+    BigSpoonTest.before :i_accept_many, :hook_10
+    @big_spoon_test.should_receive(:puts).with(["ohai", "i'll be an array", "someday"])
+    @big_spoon_test.i_accept_many("ohai", "i'll be an array", "someday")
+  end
+
+  it "should handle an option argument" do
+    BigSpoonTest.after :i_might_accept_one, :hook_11
+    @big_spoon_test.should_receive(:puts).with(nil)
+    @big_spoon_test.i_might_accept_one
+  end
+
+  it "should debug clearly when a method throws an error" do
+    BigSpoonTest.after :raise_sommat, :hook_12
+    begin
+      @big_spoon_test.raise_sommat
+    rescue Exception => error
+      $!.backtrace.first.should =~ /:\d+\:in `raise_sommat'/
+    end
   end
 end

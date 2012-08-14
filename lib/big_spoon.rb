@@ -19,12 +19,16 @@ module BigSpoon
       end
       @hooks
     end # `hooks` method
-    
+
     private
     def method_missing(method_name, *args)
       case method_name.to_s
+      when 'after'
+        hooks.after *args
       when /^after_(.+)$/
         hooks.after $1, *args
+      when 'before'
+        hooks.before *args
       when /^before_(.+)$/
         hooks.before $1, *args
       else

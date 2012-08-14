@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "big_spoon"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Flip Sasser"]
-  s.date = "2012-08-12"
+  s.date = "2012-08-14"
   s.description = "\n      BigSpoon will add a hooks method to every class. Call that method with a block and add all kinds of fun hooks before and after your methods.\n    "
   s.email = "flip@x451.com"
   s.extra_rdoc_files = [
