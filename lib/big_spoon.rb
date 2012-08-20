@@ -2,10 +2,10 @@ require 'big_spoon/hook'
 
 module BigSpoon
   module ClassMethods
-    def hooks(options = {}, &block)
+    def spoon(options = {}, &block)
       @hooks ||= Hook.for(self)
       @hooks.instance_eval(&block) if block_given?
-
+    
       unless respond_to?(:_big_spoon_original_method_added)
         class << self
           alias :_big_spoon_original_method_added :method_added
@@ -18,24 +18,33 @@ module BigSpoon
         end
       end
       @hooks
-    end # `hooks` method
+    end # `big_spoon` method
 
     private
-    def method_missing(method_name, *args)
+    def method_missing_with_big_spoon(method_name, *args, &block)
       case method_name.to_s
+      when 'hooks'
+        spoon *args, &block
       when 'after'
-        hooks.after *args
+        hooks.after *args, &block
       when /^after_(.+)$/
-        hooks.after $1, *args
+        hooks.after $1, *args, &block
       when 'before'
-        hooks.before *args
+        hooks.before *args, &block
       when /^before_(.+)$/
-        hooks.before $1, *args
+        hooks.before $1, *args, &block
       else
-        super
+        method_missing_without_big_spoon(method_name, *args)
       end
     end
   end # `ClassMethods` module
 end # `BigSpoon` module
 
-Object.extend BigSpoon::ClassMethods
+Object.class_eval do
+  extend BigSpoon::ClassMethods
+  class << self
+    alias :method_missing_without_big_spoon :method_missing
+    alias :method_missing :method_missing_with_big_spoon
+  end
+end
+

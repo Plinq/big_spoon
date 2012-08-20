@@ -48,10 +48,6 @@ describe BigSpoon do
     @big_spoon_test = BigSpoonTest.new
   end
 
-  it "should monkeypatch Object" do
-    Object.should respond_to(:hooks)
-  end
-
   it "should allow me to add a hook before an object's methods BEFORE THEY EXIST" do
     @big_spoon_test.should_receive(:hook_1)
     @big_spoon_test.foo!
@@ -145,7 +141,7 @@ describe BigSpoon do
     @big_spoon_test.i_accept_many("ohai", "i'll be an array", "someday")
   end
 
-  it "should handle an option argument" do
+  it "should handle an optional argument" do
     BigSpoonTest.after :i_might_accept_one, :hook_11
     @big_spoon_test.should_receive(:puts).with(nil)
     @big_spoon_test.i_might_accept_one
@@ -155,7 +151,7 @@ describe BigSpoon do
     BigSpoonTest.after :raise_sommat, :hook_12
     begin
       @big_spoon_test.raise_sommat
-    rescue Exception => error
+    rescue
       $!.backtrace.first.should =~ /:\d+\:in `raise_sommat'/
     end
   end

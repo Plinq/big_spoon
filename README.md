@@ -12,7 +12,7 @@ Spoon** supports all of 'em. Whatever form you choose, it'll swaddle your method
 
 The most straightforward way is to do it ActiveRecord::Base style, which is to define a callback in the top of your class like so:
 
-```
+```ruby
 class User
   before_believe_in_a_thing_called_love :listen_to_the_rhythm_of_my_heart
 
@@ -33,7 +33,7 @@ class User
 
 DataMapper has what I consider a slightly better API for doing this, specifically:
 
-```
+```ruby
 class User
   after :save, :get_your_hands_off_of_my_woman
  end
@@ -45,12 +45,19 @@ So **Big Spoon** supports that notation, too! This is in order to avoid conflict
 ### Block-style
 
 If you're STILL interested in avoiding any potential conflicts, you can isolate your hooks
-completely by wrapping them in a block:
+completely by wrapping them in a block. Big Spoon adds a method named `spoon` that accepts
+a block to define hooks in. `spoon` is aliased as `hooks`, which in some cases conflicts
+with other libraries. See below:
 
-```
+```ruby
 class User
   hooks do
     before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
+  end
+
+  # This is the same as:
+  spoon do
+  	before :get_your_hands_off_of_my_woman, :listen_to_the_darkness
   end
 
   protected
@@ -68,7 +75,7 @@ But, as they say, "love is only a feeling." So spoon like there's no tomorrow.
 
 Because ActiveModel callbacks are just so damn delightful, I've added some fun conditional sugar to match their wonderful. So g'head and add some `:if` conditions to your callbacks:
 
-```
+```ruby
 class User
   before :love_on_the_rocks, :add_ice, :if => :no_ice?
 
@@ -89,7 +96,7 @@ end
 
 Conditional callbacks also support `:unless`, just like their ActiveModel ancestors. Or should I say "inspiritors?" Is that word? Shut up, of course it is. Anyway:
 
-```
+```ruby
 class User
   before :love_on_the_rocks, :add_ice, :unless => :in_tys_mazada?
 
@@ -101,7 +108,7 @@ end
 
 And to recap! Just as  with the believing-in-things-called-love example, both could be re-written along these lines:
 
-```
+```ruby
 before_love_on_the_rocks :add_ice, :if => :no_ice?
 # or
 hooks do

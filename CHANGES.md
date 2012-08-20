@@ -1,4 +1,9 @@
 # CHANGELOG
+## 0.2.1
+### `hooks` now aliased as `spoon` to avoid namespace conflicts
+- Fixes bugs w/Railties generators and other libraries that use
+  a class method named `hooks`
+
 ## 0.2.0
 ### Multiple bugs fixed and test for decent backtraces
 - before and after filters no longer assume argument-less-methods
